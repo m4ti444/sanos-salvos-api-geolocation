@@ -1,0 +1,18 @@
+﻿services:
+  - type: web
+    name: sanos-salvos-api-geolocation
+    runtime: docker
+    plan: free
+    branch: main
+    healthCheckPath: /api/geo/reports
+    envVars:
+      - key: POSTGRES_USER
+        sync: false
+      - key: POSTGRES_PASSWORD
+        sync: false
+      - key: POSTGRES_HOST
+        sync: false
+      - key: POSTGRES_PORT
+        value: 5432
+      - key: POSTGRES_DB
+        sync: false
