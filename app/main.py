@@ -7,10 +7,22 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from sqlalchemy import text
+
 from app.api.routes import router
+from app.config import Base, engine
+from app.models import location
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("geo-service")
+
+def init_database():
+    """Create PostGIS extension, service schema and tables when running fresh."""
+    with engine.begin() as conn:
+        conn.execute(text("CREATE EXTENSION IF NOT EXISTS postgis"))
+        conn.execute(text("CREATE SCHEMA IF NOT EXISTS geo_service"))
+    Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI(
     title="Sanos y Salvos — Geolocalización",
